@@ -1,13 +1,16 @@
 // pages/_app.tsx
 import type { AppProps } from "next/app";
 import WalletProvider from "@/contexts/WalletContext";
+import SolanaContractProvider from "@/contexts/ContractContext";
 
 const RPC_URL = "https://api.mainnet-beta.solana.com";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <WalletProvider rpcUrl={RPC_URL}>
-      <Component {...pageProps} />
+      <SolanaContractProvider>
+        <Component {...pageProps} />
+      </SolanaContractProvider>
     </WalletProvider>
   );
 }

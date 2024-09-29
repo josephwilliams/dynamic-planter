@@ -35,7 +35,7 @@ const WalletProvider: React.FC<{ rpcUrl: string; children: any }> = ({
   };
 
   const disconnectWallet = () => {
-    backpackConnector.disconnect();
+    backpackConnector?.disconnect();
     setWalletAddress(null);
   };
 

@@ -31,7 +31,7 @@ export class BackpackConnector {
 
   // Disconnect from Backpack
   disconnect() {
-    (window as any).backpack.disconnect();
+    (window as any).backpack?.disconnect();
     this.publicKey = null;
   }
 
