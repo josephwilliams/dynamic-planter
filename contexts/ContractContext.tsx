@@ -30,7 +30,7 @@ const RPC_URL = "https://api.devnet.solana.com";
 
 interface SolanaContractContextProps {
   count: number | null;
-  incrementCount: () => Promise<void>;
+  incrementCount: (addTree: any) => Promise<void>;
   isIncrementing: boolean;
 }
 
@@ -141,7 +141,7 @@ const SolanaContractProvider: React.FC<{
       } else {
         console.log("Transaction confirmed");
         // optimistic update, as the updated count isn't immediately fetchable.
-        setCount((prevCount) => (prevCount ?? 0) + 1);
+        setCount((prevCount) => (prevCount || 0) + 1);
       }
 
       // You can add logic here to update your UI or fetch the new count
