@@ -42,4 +42,8 @@ export class BackpackConnector {
   getConnection(): Connection {
     return this.connection;
   }
+
+  signTransaction(transaction: any) {
+    return (window as any).backpack.signTransaction(transaction);
+  }
 }

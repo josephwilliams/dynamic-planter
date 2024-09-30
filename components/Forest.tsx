@@ -33,7 +33,7 @@ const GREEN_COLORS = [
   "#228B22",
 ];
 
-const SPRITES = ["~", "*", " ", "^", "+", " ", " ", ".", " ", "🌳"]; // Include tree emoji
+const SPRITES = [" ", " ", "", "~", "*", " ", "+", "🌳"]; // Include tree emoji
 const GRID_SIZE = 30;
 
 type Cell = string | null;
@@ -98,8 +98,6 @@ const ForestMatrix: React.FC = () => {
               height: "12px",
               textAlign: "center",
               lineHeight: "12px",
-              border: "1px solid #fefefe",
-              boxSizing: "border-box",
               opacity: cell === "🌳" ? 1 : 0.5,
               // random green
               color:
@@ -115,23 +113,41 @@ const ForestMatrix: React.FC = () => {
 };
 
 export default function Forest() {
-  const { incrementCount } = useSolanaContract();
+  const { incrementCount, isIncrementing } = useSolanaContract();
   const { walletAddress } = useWallet(); // Access the connected wallet
 
   return (
-    <div
-      style={{
-        position: "relative",
-        width: "360px",
-        height: "360px",
-        maxWidth: "100vw",
-        // border: "1px solid lightgray",
-        overflow: "auto",
-      }}
-      className="rounded-lg bg-white"
-    >
-      <ForestMatrix />
-      {walletAddress && <button onClick={incrementCount}>Plant a Tree</button>}
+    <div className="flex flex-col items-center justify-center">
+      {/* <div>
+        <ol>
+          <li>
+            <h1 className="text-xs font-bold">Solana Forest</h1>
+          </li>
+          <li className="text-xs">1. Connect Wallet to Solana Testnet</li>
+          <li className="text-xs">2. </li>
+        </ol>
+      </div> */}
+      <div
+        style={{
+          position: "relative",
+          width: "360px",
+          height: "360px",
+          maxWidth: "100vw",
+          // border: "1px solid lightgray",
+          overflow: "hidden",
+        }}
+        className="rounded-lg bg-white shadow-lg"
+      >
+        <ForestMatrix />
+      </div>
+      {walletAddress && (
+        <button
+          className="shadow-md bg-[#6e9e6e] text-white rounded-md p-3 mt-3 text-sm min-w-[120px]"
+          onClick={incrementCount}
+        >
+          {isIncrementing ? "Planting... 🌱" : "Plant a Tree 🌳"}
+        </button>
+      )}
     </div>
   );
 }

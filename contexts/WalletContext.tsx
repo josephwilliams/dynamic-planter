@@ -3,11 +3,14 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import { BackpackConnector } from "../lib/BackpackConnector";
 import { PublicKey } from "@solana/web3.js";
 
+const RPC_URL = "https://api.devnet.solana.com";
+
 // Define types for the context state
 interface WalletContextProps {
   walletAddress: PublicKey | null;
   connectWallet: () => Promise<void>;
   disconnectWallet: () => void;
+  signTransaction: (transaction: any) => Promise<any>;
 }
 
 const WalletContext = createContext<WalletContextProps | undefined>(undefined);
@@ -20,12 +23,9 @@ export const useWallet = (): WalletContextProps => {
   return context;
 };
 
-const WalletProvider: React.FC<{ rpcUrl: string; children: any }> = ({
-  children,
-  rpcUrl,
-}) => {
+const WalletProvider: React.FC<{ children: any }> = ({ children }) => {
   const [walletAddress, setWalletAddress] = useState<PublicKey | null>(null);
-  const backpackConnector = new BackpackConnector(rpcUrl);
+  const backpackConnector = new BackpackConnector(RPC_URL);
 
   const connectWallet = async () => {
     const publicKey = await backpackConnector.connect();
@@ -37,6 +37,10 @@ const WalletProvider: React.FC<{ rpcUrl: string; children: any }> = ({
   const disconnectWallet = () => {
     backpackConnector?.disconnect();
     setWalletAddress(null);
+  };
+
+  const signTransaction = async (transaction: any) => {
+    return backpackConnector.signTransaction(transaction);
   };
 
   useEffect(() => {
@@ -51,7 +55,12 @@ const WalletProvider: React.FC<{ rpcUrl: string; children: any }> = ({
 
   return (
     <WalletContext.Provider
-      value={{ walletAddress, connectWallet, disconnectWallet }}
+      value={{
+        walletAddress,
+        connectWallet,
+        disconnectWallet,
+        signTransaction,
+      }}
     >
       {children}
     </WalletContext.Provider>
