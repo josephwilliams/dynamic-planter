@@ -5,6 +5,8 @@ import SolanaContractProvider from "@/contexts/ContractContext";
 
 const RPC_URL = "https://api.mainnet-beta.solana.com";
 
+import "../styles/globals.css";
+
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <WalletProvider rpcUrl={RPC_URL}>

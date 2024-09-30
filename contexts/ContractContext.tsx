@@ -49,7 +49,7 @@ const SolanaContractProvider: React.FC<{
   useEffect(() => {
     const conn = new Connection(RPC_URL);
     setConnection(conn);
-    setProgramId(new PublicKey(CONTRACT_ADDRESS));
+    // setProgramId(new PublicKey(CONTRACT_ADDRESS));
   }, []);
 
   // Fetch the current count from the smart contract
