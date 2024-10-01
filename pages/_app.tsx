@@ -1,4 +1,3 @@
-// pages/_app.tsx
 import type { AppProps } from "next/app";
 import WalletProvider from "@/contexts/WalletContext";
 import SolanaContractProvider from "@/contexts/ContractContext";
