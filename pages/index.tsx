@@ -11,7 +11,7 @@ export default function Home() {
       <Forest />
       <WalletButton />
       <Link
-        className="mt-3 underline decoration-dotted text-[#386e39] flex items-center"
+        className="text-[12px] mt-3 underline decoration-dotted text-[#386e39] flex items-center"
         href="https://github.com/josephwilliams/backpacker"
         target="_blank"
       >
