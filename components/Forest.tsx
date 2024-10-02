@@ -24,12 +24,17 @@ const Forest: React.FC = () => {
         <ForestMatrix />
       </div>
       {walletAddress && (
-        <button
-          className="shadow-md bg-[#6e9e6e] text-white rounded-md p-3 mt-3 text-sm min-w-[120px]"
-          onClick={incrementCount}
-        >
-          {isIncrementing ? "Planting... 🌱" : "Plant a Tree 🌳"}
-        </button>
+        <>
+          <button
+            className="shadow-md bg-[#6e9e6e] text-white rounded-md p-3 mt-3 text-sm min-w-[120px]"
+            onClick={incrementCount}
+          >
+            {isIncrementing ? "Planting... 🌱" : "Plant a Tree 🌳"}
+          </button>
+          <div className="text-[12px] text-[#386e39]">
+            *Requires Solana Devnet
+          </div>
+        </>
       )}
     </div>
   );
