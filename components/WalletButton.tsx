@@ -16,7 +16,7 @@ const WalletButton: React.FC = () => {
         <DynamicWidget />
       </div>
       <div className="text-[12px] text-[#386e39]">
-        *Recommended Polygon Network
+        *Polygon Network Recommended
       </div>
     </div>
   );
