@@ -147,7 +147,6 @@ const EVMContractProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   }, [primaryWallet]);
 
-  // Function to fetch the last 5 wallet addresses that called the `increment` function
   const getLastFiveWallets = useCallback(async () => {
     if (!primaryWallet || !isEthereumWallet(primaryWallet)) return [];
 
@@ -163,8 +162,14 @@ const EVMContractProvider: React.FC<{ children: React.ReactNode }> = ({
         ...filter,
       });
 
-      // Extract wallet addresses (the `from` field in the logs) and reverse to get last 5
-      const walletAddresses = logs.slice(-5).map((log) => log.address);
+      // Extract wallet addresses by fetching the transaction for each log
+      const walletAddresses = await Promise.all(
+        logs.slice(-5).map(async (log) => {
+          const tx = await provider.getTransaction(log.transactionHash);
+          return tx.from; // This will give the wallet address that made the transaction
+        })
+      );
+
       return walletAddresses.reverse(); // Return last 5 wallets in reverse chronological order
     } catch (error) {
       console.error("Error fetching last 5 wallet addresses:", error);
