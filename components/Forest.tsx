@@ -31,9 +31,6 @@ const Forest: React.FC = () => {
           >
             {isIncrementing ? "Planting... 🌱" : "Plant a Tree 🌳"}
           </button>
-          <div className="text-[12px] text-[#386e39]">
-            *Recommended Polygon Network
-          </div>
         </>
       )}
     </div>

@@ -1,4 +1,3 @@
-// context/EVMContractContext.tsx
 import React, {
   createContext,
   useCallback,
@@ -6,12 +5,11 @@ import React, {
   useEffect,
   useState,
 } from "react";
-import { Contract } from "ethers"; // Use ethers v6
+import { Contract } from "ethers";
 import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
 import { isEthereumWallet } from "@dynamic-labs/ethereum";
-import { getWeb3Provider, getSigner } from "@dynamic-labs/ethers-v6"; // Make sure you're using ethers-v6 from Dynamic Labs
+import { getWeb3Provider, getSigner } from "@dynamic-labs/ethers-v6";
 
-// Contract ABI for your Polygon contract (the one you provided)
 const CONTRACT_ABI = [
   {
     inputs: [],
@@ -73,13 +71,13 @@ const CONTRACT_ABI = [
   },
 ];
 
-// Address of your deployed contract on Polygon
 const CONTRACT_ADDRESS = "0x5b2b3b3a8fe3e8c88e7d9b2d729b53180c355c2d";
 
 interface EVMContractContextProps {
   count: number | null;
   incrementCount: () => Promise<void>;
   isIncrementing: boolean;
+  getLastFiveWallets: () => Promise<string[]>;
 }
 
 const EVMContractContext = createContext<EVMContractContextProps | undefined>(
@@ -108,7 +106,7 @@ const EVMContractProvider: React.FC<{ children: React.ReactNode }> = ({
     if (!primaryWallet || !isEthereumWallet(primaryWallet)) return;
 
     try {
-      const provider = await getWeb3Provider(primaryWallet); // Use ethers-v6 provider from Dynamic Labs
+      const provider = await getWeb3Provider(primaryWallet); // Get provider using Dynamic Labs
       const contract = new Contract(CONTRACT_ADDRESS, CONTRACT_ABI, provider);
 
       // Call the `getCount` function from the contract
@@ -129,7 +127,7 @@ const EVMContractProvider: React.FC<{ children: React.ReactNode }> = ({
     try {
       setIsIncrementing(true);
 
-      const signer = await getSigner(primaryWallet); // Use ethers-v6 signer from Dynamic Labs
+      const signer = await getSigner(primaryWallet); // Get signer using Dynamic Labs
       const contract = new Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
 
       // Send the transaction to increment the counter
@@ -149,6 +147,31 @@ const EVMContractProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   }, [primaryWallet]);
 
+  // Function to fetch the last 5 wallet addresses that called the `increment` function
+  const getLastFiveWallets = useCallback(async () => {
+    if (!primaryWallet || !isEthereumWallet(primaryWallet)) return [];
+
+    try {
+      const provider = await getWeb3Provider(primaryWallet);
+      const contract = new Contract(CONTRACT_ADDRESS, CONTRACT_ABI, provider);
+
+      // Query the past logs for the `CountIncremented` event
+      const filter = contract.filters.CountIncremented();
+      const logs = await provider.getLogs({
+        fromBlock: "latest", // You can adjust the block range or remove this to get all logs
+        toBlock: "latest",
+        ...filter,
+      });
+
+      // Extract wallet addresses (the `from` field in the logs) and reverse to get last 5
+      const walletAddresses = logs.slice(-5).map((log) => log.address);
+      return walletAddresses.reverse(); // Return last 5 wallets in reverse chronological order
+    } catch (error) {
+      console.error("Error fetching last 5 wallet addresses:", error);
+      return [];
+    }
+  }, [primaryWallet]);
+
   useEffect(() => {
     if (primaryWallet && isEthereumWallet(primaryWallet)) {
       fetchCount(); // Fetch count on wallet connect
@@ -157,7 +180,7 @@ const EVMContractProvider: React.FC<{ children: React.ReactNode }> = ({
 
   return (
     <EVMContractContext.Provider
-      value={{ count, incrementCount, isIncrementing }}
+      value={{ count, incrementCount, isIncrementing, getLastFiveWallets }}
     >
       {children}
     </EVMContractContext.Provider>

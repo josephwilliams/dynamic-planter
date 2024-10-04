@@ -8,8 +8,8 @@ export default function Home() {
     <div className="flex flex-col justify-center items-center p-3 m-0-auto forest-bg min-h-screen max-h-screen">
       {/* <h1>Solana Wallet Integration with Backpack</h1> */}
 
-      <Forest />
       <WalletButton />
+      <Forest />
       <Link
         className="text-[12px] mt-3 underline decoration-dotted text-[#386e39] flex items-center"
         href="https://github.com/josephwilliams/backpacker"
