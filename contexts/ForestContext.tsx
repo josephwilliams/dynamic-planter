@@ -9,7 +9,7 @@ import React, {
   useCallback,
   useRef,
 } from "react";
-import { useSolanaContract } from "@/contexts/ContractContext";
+import { useEVMContract } from "@/contexts/ContractContext";
 
 const GRID_SIZE = 30;
 const SPRITES = [" ", " ", "", "~", "*", " ", "+", "🌳"]; // Include tree emoji
@@ -69,7 +69,7 @@ const generateMatrix = (count: number, existingMatrix?: Cell[][]): Cell[][] => {
 export const ForestProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  const { count: treeCount } = useSolanaContract();
+  const { count: treeCount } = useEVMContract();
   const [matrix, setMatrix] = useState<Cell[][]>([]);
   const matrixRef = useRef<Cell[][]>(null); // Store the matrix in a ref so it persists between renders
 

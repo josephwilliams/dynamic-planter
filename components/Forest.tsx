@@ -1,13 +1,13 @@
 // components/Forest.tsx
 
 import React from "react";
-import { useSolanaContract } from "@/contexts/ContractContext";
-import { useWallet } from "@/contexts/WalletContext";
+import { useEVMContract } from "@/contexts/ContractContext";
 import ForestMatrix from "./ForestMatrix";
+import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
 
 const Forest: React.FC = () => {
-  const { incrementCount, isIncrementing } = useSolanaContract();
-  const { walletAddress } = useWallet(); // Access the connected wallet
+  const { incrementCount, isIncrementing } = useEVMContract();
+  const { primaryWallet } = useDynamicContext();
 
   return (
     <div className="flex flex-col items-center justify-center">
@@ -23,7 +23,7 @@ const Forest: React.FC = () => {
       >
         <ForestMatrix />
       </div>
-      {walletAddress && (
+      {primaryWallet?.address && (
         <>
           <button
             className="shadow-md bg-[#6e9e6e] text-white rounded-md p-3 mt-3 text-sm min-w-[120px]"
@@ -32,7 +32,7 @@ const Forest: React.FC = () => {
             {isIncrementing ? "Planting... 🌱" : "Plant a Tree 🌳"}
           </button>
           <div className="text-[12px] text-[#386e39]">
-            *Requires Solana Devnet
+            *Recommended Polygon Network
           </div>
         </>
       )}
