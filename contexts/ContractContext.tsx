@@ -77,7 +77,6 @@ interface EVMContractContextProps {
   count: number | null;
   incrementCount: () => Promise<void>;
   isIncrementing: boolean;
-  getLastFiveWallets: () => Promise<string[]>;
 }
 
 const EVMContractContext = createContext<EVMContractContextProps | undefined>(
@@ -147,36 +146,6 @@ const EVMContractProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   }, [primaryWallet]);
 
-  const getLastFiveWallets = useCallback(async () => {
-    if (!primaryWallet || !isEthereumWallet(primaryWallet)) return [];
-
-    try {
-      const provider = await getWeb3Provider(primaryWallet);
-      const contract = new Contract(CONTRACT_ADDRESS, CONTRACT_ABI, provider);
-
-      // Query the past logs for the `CountIncremented` event
-      const filter = contract.filters.CountIncremented();
-      const logs = await provider.getLogs({
-        fromBlock: "latest", // You can adjust the block range or remove this to get all logs
-        toBlock: "latest",
-        ...filter,
-      });
-
-      // Extract wallet addresses by fetching the transaction for each log
-      const walletAddresses = await Promise.all(
-        logs.slice(-5).map(async (log) => {
-          const tx = await provider.getTransaction(log.transactionHash);
-          return tx.from; // This will give the wallet address that made the transaction
-        })
-      );
-
-      return walletAddresses.reverse(); // Return last 5 wallets in reverse chronological order
-    } catch (error) {
-      console.error("Error fetching last 5 wallet addresses:", error);
-      return [];
-    }
-  }, [primaryWallet]);
-
   useEffect(() => {
     if (primaryWallet && isEthereumWallet(primaryWallet)) {
       fetchCount(); // Fetch count on wallet connect
@@ -185,7 +154,7 @@ const EVMContractProvider: React.FC<{ children: React.ReactNode }> = ({
 
   return (
     <EVMContractContext.Provider
-      value={{ count, incrementCount, isIncrementing, getLastFiveWallets }}
+      value={{ count, incrementCount, isIncrementing }}
     >
       {children}
     </EVMContractContext.Provider>

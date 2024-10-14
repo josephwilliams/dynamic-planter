@@ -21,17 +21,6 @@ const Forest: React.FC = () => {
   const { incrementCount, isIncrementing } = useEVMContract();
   const { primaryWallet } = useDynamicContext();
 
-  // const [wallets, setWallets] = useState<string[]>([]);
-
-  // useEffect(() => {
-  //   const fetchWallets = async () => {
-  //     const lastFiveWallets = await getLastFiveWallets();
-  //     setWallets(lastFiveWallets);
-  //   };
-
-  //   fetchWallets();
-  // }, [getLastFiveWallets]);
-
   return (
     <div className="flex flex-col items-center justify-center">
       <div
@@ -56,18 +45,6 @@ const Forest: React.FC = () => {
           </button>
         </>
       )}
-      {/* <div className="text-[12px] mt-3 text-[#386e39]">
-        {wallets.length > 0 && (
-          <>
-            <p>Last 5 wallets:</p>
-            <ul>
-              {wallets.map((wallet, index) => (
-                <li key={index}>{wallet}</li>
-              ))}
-            </ul>
-          </>
-        )}
-      </div> */}
     </div>
   );
 };
